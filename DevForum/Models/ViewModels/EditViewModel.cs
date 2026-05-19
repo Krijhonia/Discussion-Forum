@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace DevForum.Models.ViewModels;
+
+public class EditPostViewModel
+{
+        public Post Post { get; set; }
+        [ValidateNever]
+        public IEnumerable<SelectListItem> Categories { get; set; }
+
+        public IFormFile FeatureImage { get; set; }
+}

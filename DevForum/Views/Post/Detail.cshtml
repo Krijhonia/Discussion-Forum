@@ -1,0 +1,131 @@
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model Post
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Back to Discussions</a>
+</div>
+
+<div class="post-header">
+    <div class="d-flex justify-content-between align-items-start">
+        <div>
+            <span class="badge-category mb-3 d-inline-block">@Model.Category?.Name</span>
+            <h1 class="mb-2">@Model.Title</h1>
+            <div class="text-muted fs-6 d-flex align-items-center gap-2">
+                <i class="bi bi-person-circle text-muted"></i> <strong>@Model.Author</strong>
+                <span>•</span>
+                <span>@Model.PublishedDate.ToString("MMM dd, yyyy")</span>
+            </div>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-controller="Post" asp-route-id="@Model.Id" class="btn btn-outline-secondary btn-sm me-2"><i class="bi bi-pencil-square"></i> Edit</a>
+            <a asp-action="Delete" asp-controller="Post" asp-route-id="@Model.Id" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Delete</a>
+        </div>
+    </div>
+</div>
+
+<div class="post-content-box mb-5">
+    @if (!string.IsNullOrEmpty(Model.FeatureImagePath))
+    {
+        <div class="mb-4 text-center">
+            <img src="@Model.FeatureImagePath" alt="Attachment" class="img-fluid rounded" style="max-height: 500px; border: 1px solid var(--border-subtle);" />
+        </div>
+    }
+    
+    <div class="fs-5 lh-lg" style="color: #e5e5e5;">
+        @Html.Raw(Model.Content)
+    </div>
+</div>
+
+<div id="commentSection" class="mt-5">
+    <h3 class="mb-4">Replies (@Model.Comments.Count)</h3>
+    
+    @if (!Model.Comments.Any())
+    {
+        <div class="comment-box text-center p-4 text-muted mb-4" id="noRepliesDiv">
+            No replies yet. Be the first to share your thoughts!
+        </div>
+    }
+    else
+    {
+        @foreach (var comment in Model.Comments.OrderBy(c => c.CommentDate))
+        {
+            <div class="comment-box">
+                <div class="comment-meta text-muted border-bottom pb-2 mb-3" style="border-color: var(--border-subtle) !important;">
+                    <span><strong style="color: var(--text-main);">@comment.Username</strong> replied</span>
+                    <span>@comment.CommentDate.ToString("MMM dd, yyyy HH:mm")</span>
+                </div>
+                <div class="comment-body fs-6" style="color: #d4d4d4;">
+                    @comment.Content
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div class="comment-box mt-5 p-4">
+    <h4 class="mb-4">Post a Reply</h4>
+    <form id="commentForm">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="Username" class="form-label">Display Name</label>
+                <input type="text" id="Username" name="Username" class="form-control" autocomplete="off" value="@(User.Identity.IsAuthenticated ? User.Identity.Name : "")" @(User.Identity.IsAuthenticated ? "readonly" : "")>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="Content" class="form-label">Message</label>
+            <textarea name="Content" id="Content" rows="4" required class="form-control" placeholder="Write your reply..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Reply</button>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#commentForm").on('submit', function (event) {
+                event.preventDefault();
+                var userName = $("#Username").val();
+                var content = $("#Content").val();
+                // Basic validation
+                if(!userName || !content) return;
+
+                var postId = @Model.Id;
+
+                $.ajax({
+                  url: '@Url.Action("AddComment","Post")',
+                  type: 'POST',
+                  contentType: 'application/json',
+                  data: JSON.stringify({
+                    Username: userName,
+                    Content: content,
+                    PostId: postId
+                  }),
+                  success : function(response){
+                    $('#commentForm')[0].reset();
+                    @if(User.Identity.IsAuthenticated)
+                    {
+                        @: $("#Username").val('@User.Identity.Name');
+                    }
+                    var newCommentHTML = `
+                    <div class="comment-box">
+                        <div class="comment-meta text-muted border-bottom pb-2 mb-3" style="border-color: var(--border-subtle) !important;">
+                            <span><strong style="color: var(--text-main);">${response.username}</strong> replied Just Now</span>
+                            <span>${response.commentDate}</span>
+                        </div>
+                        <div class="comment-body fs-6" style="color: #d4d4d4;">
+                            ${response.comment}
+                        </div>
+                    </div>
+                    `;
+
+                    $('#noRepliesDiv').remove();
+                    $('#commentSection').append(newCommentHTML);
+                  }
+                });
+            });
+        });
+    </script>
+}
