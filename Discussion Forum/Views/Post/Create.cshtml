@@ -1,0 +1,83 @@
+@model PostViewModel
+
+@{
+    ViewData["Title"] = "Start a Discussion";
+}
+
+<div class="content-wrapper post-card p-4 p-md-5 mb-5 mt-2 border-0">
+    <div class="row mb-4">
+        <div class="col-6">
+            <h2 class="fw-bold">@ViewData["Title"]</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-action="Index" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Back to Discussions</a>
+        </div>
+    </div>
+    <hr style="border-color: var(--surface-border);">
+    <form asp-action="Create" asp-controller="Post" method="post" enctype="multipart/form-data">
+    <div class="validation-summary">
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="" asp-for="Post.Title" class="form-label">Discussion Title</label>
+        <input type="text" asp-for="Post.Title" class="form-control" />
+        <span asp-validation-for="Post.Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for=" " asp-for="Post.CategoryId" class="form-label">Category</label>
+        <select asp-for="Post.CategoryId" asp-items="Model.Categories" class="form-select">
+            <option value="">Select Category</option>
+        </select>
+        <span asp-validation-for="Post.CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="" asp-for="Post.Author" class="form-label">Your Display Name</label>
+        <input type="text" asp-for="Post.Author" class="form-control" />
+        <span asp-validation-for="Post.Author" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="" asp-for="Post.Content" class="form-label">Initial Message</label>
+        <small class="text-muted d-block mb-2"><i class="bi bi-info-circle"></i> Tip: You can add code blocks using the editor's code block button or by using HTML &lt;pre&gt;&lt;code&gt; tags. Use the language attribute for syntax highlighting: &lt;code class="language-csharp"&gt;</small>
+        <textarea asp-for="Post.Content" class="form-control" rows="5"></textarea>
+        <span asp-validation-for="Post.Content" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-4">
+        <label for="" asp-for="FeatureImage" class="form-label">Attachment / Header Image (Optional)</label>
+        <input type="file" asp-for="FeatureImage" class="form-control" />
+        <span asp-validation-for="FeatureImage" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-1 px-4">Post Discussion</button>
+    <a class="btn btn-outline-secondary mt-1 px-4" asp-action="Index" asp-controller="Post">Cancel</a>
+    </form>
+</div>
+@section Scripts{
+       <script src="https://cdn.tiny.cloud/1/9j0lqsw6e2wadbewavsjh1dzub7961i0n3h383864l60z8vp/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+        <script>
+             tinymce.init({
+                selector: 'textarea',
+                plugins: 'codesample code lists link table',
+                toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | codesample | code | removeformat',
+                menubar: false,
+                height: 320,
+                content_css: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css',
+                codesample_languages: [
+                    {text: 'C#', value: 'csharp'},
+                    {text: 'JavaScript', value: 'javascript'},
+                    {text: 'Python', value: 'python'},
+                    {text: 'HTML', value: 'html'},
+                    {text: 'CSS', value: 'css'},
+                    {text: 'SQL', value: 'sql'},
+                    {text: 'Java', value: 'java'},
+                    {text: 'Go', value: 'go'},
+                    {text: 'PHP', value: 'php'}
+                ],
+                extended_valid_elements: 'pre[class|name|id],code[class|name|id]',
+                valid_children: '+body[pre], +pre[code]',
+                entity_encoding: 'raw'
+        });
+        </script>
+}

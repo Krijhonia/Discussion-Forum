@@ -1,0 +1,1086 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;600;700&display=swap');
+
+:root {
+  --bg-deep: #000000;
+  --bg-surface: rgba(18, 18, 18, 0.6);
+  --bg-surface-solid: #121212;
+  --bg-glass: rgba(255, 255, 255, 0.03);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(59, 130, 246, 0.5);
+  
+  --text-main: #f5f5f5;
+  --text-muted: #888888;
+  
+  --primary-color: #ffffff;
+  --primary-hover: #e5e5e5;
+  --accent-color: #3b82f6;
+  --accent-glow: 0 0 20px rgba(59, 130, 246, 0.4);
+  
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+  --font-display: 'Outfit', -apple-system, sans-serif;
+  --bg-deep-light: #f7f8fc;
+  --bg-surface-light: rgba(255, 255, 255, 0.85);
+  --bg-surface-solid-light: #ffffff;
+  --bg-glass-light: rgba(255, 255, 255, 0.7);
+  --border-subtle-light: rgba(15, 23, 42, 0.1);
+  --text-main-light: #1f2937;
+  --text-muted-light: #475569;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-main);
+  background-color: var(--bg-deep);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(30, 58, 138, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(88, 28, 135, 0.15) 0%, transparent 50%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding-top: 120px;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+.light-theme {
+  --bg-deep: var(--bg-deep-light);
+  --bg-surface: var(--bg-surface-light);
+  --bg-surface-solid: var(--bg-surface-solid-light);
+  --bg-glass: var(--bg-glass-light);
+  --border-subtle: var(--border-subtle-light);
+  --text-main: var(--text-main-light);
+  --text-muted: var(--text-muted-light);
+  --primary-color: #111827;
+  --accent-color: #2563eb;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: -0.03em;
+}
+
+a {
+  color: var(--text-main);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+a:hover {
+  color: var(--accent-color);
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+/* Glass Navbar */
+.custom-nav {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  background-color: rgba(0, 0, 0, 0.75) !important;
+}
+
+.custom-nav .navbar-brand {
+  background: linear-gradient(to right, #fff, #a5b4fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: auto;
+}
+
+.custom-nav .nav-link {
+  color: var(--text-muted) !important;
+  font-weight: 500;
+  position: relative;
+}
+
+.brand-logo {
+  width: auto;
+  max-height: 48px;
+  max-width: 64px;
+  height: auto;
+  border-radius: 6px;
+  object-fit: contain;
+  display: inline-block;
+  filter: none;
+  box-shadow: none;
+}
+
+.custom-nav .nav-link:hover {
+  color: #fff !important;
+}
+
+/* Discussion List / Cards */
+.forum-list {
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.forum-item {
+  background: var(--bg-surface);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.forum-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 4px; height: 100%;
+  background: var(--accent-color);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.forum-item:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 15px rgba(59, 130, 246, 0.15);
+  background: var(--bg-surface-solid);
+}
+
+.forum-item:hover::before {
+  opacity: 1;
+}
+
+.forum-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.light-theme .forum-title,
+html[data-theme="light"] .forum-title,
+body[data-theme="light"] .forum-title {
+  color: #111827 !important;
+}
+
+.forum-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Component Boxes */
+.post-content-box, .comment-box, .card {
+  background: var(--bg-surface) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2) !important;
+  overflow: hidden;
+}
+
+.comment-box {
+  padding: 1.75rem 1.8rem;
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 22px 48px rgba(15, 23, 42, 0.06);
+}
+
+.comment-item .comment-box {
+  position: relative;
+}
+
+.comment-replies {
+  margin-left: 1.5rem;
+  padding-left: 1rem;
+  display: grid;
+  gap: 1rem;
+  border-left: 2px solid rgba(59, 130, 246, 0.18);
+}
+
+.reply-box {
+  background: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 1.3rem 1.35rem;
+}
+
+.comment-box .comment-meta,
+.reply-box .comment-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.comment-box .comment-body,
+.reply-box .comment-body {
+  margin-top: 1rem;
+  color: rgba(51, 65, 85, 0.95);
+  line-height: 1.85;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  padding-right: 0.25rem;
+}
+
+html.light-theme .comment-box .comment-body,
+body.light-theme .comment-box .comment-body,
+html[data-theme="light"] .comment-box .comment-body,
+body[data-theme="light"] .comment-box .comment-body,
+html.light-theme .reply-box .comment-body,
+body.light-theme .reply-box .comment-body,
+html[data-theme="light"] .reply-box .comment-body,
+body[data-theme="light"] .reply-box .comment-body {
+  color: #334155 !important;
+}
+
+.comment-actions {
+  margin-top: 1.2rem;
+}
+
+.reply-box .comment-meta {
+  margin-bottom: 0.85rem;
+}
+
+.comment-actions .btn-link {
+  padding-left: 0;
+  color: #22c55e;
+}
+
+.comment-actions .btn-link:hover {
+  color: #16a34a;
+  text-decoration: none;
+}
+
+.light-theme .reply-box,
+html[data-theme="light"] .reply-box,
+body[data-theme="light"] .reply-box {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(226, 232, 240, 1);
+}
+
+.light-theme .custom-nav,
+html[data-theme="light"] .custom-nav,
+body[data-theme="light"] .custom-nav {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+.light-theme .custom-nav .nav-link,
+.light-theme .custom-nav .navbar-brand,
+.light-theme .custom-nav .btn,
+html[data-theme="light"] .custom-nav .nav-link,
+body[data-theme="light"] .custom-nav .nav-link,
+html[data-theme="light"] .custom-nav .navbar-brand,
+body[data-theme="light"] .custom-nav .navbar-brand,
+html[data-theme="light"] .custom-nav .btn,
+body[data-theme="light"] .custom-nav .btn {
+  color: #1f2937 !important;
+}
+
+.light-theme .custom-nav .navbar-brand,
+html[data-theme="light"] .custom-nav .navbar-brand,
+body[data-theme="light"] .custom-nav .navbar-brand {
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  color: #111827 !important;
+}
+
+.light-theme .custom-nav .btn-outline-secondary {
+  color: #1f2937 !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+}
+
+html.light-theme,
+body.light-theme,
+html[data-theme="light"],
+body[data-theme="light"] {
+  background-color: #f8fafc !important;
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.12) 0%, transparent 50%) !important;
+  color: var(--text-main) !important;
+}
+
+html.light-theme .form-control,
+body.light-theme .form-control,
+html.light-theme .form-select,
+body.light-theme .form-select,
+html[data-theme="light"] .form-control,
+body[data-theme="light"] .form-control,
+html[data-theme="light"] .form-select,
+body[data-theme="light"] .form-select {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(15, 23, 42, 0.12);
+  color: #1f2937;
+}
+
+.light-theme .form-control:focus,
+.light-theme .form-select:focus {
+  background: #fff;
+  color: #1f2937;
+  border-color: rgba(37, 99, 235, 0.4);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.light-theme .form-select option {
+  background: #fff;
+  color: #1f2937;
+}
+
+.light-theme .form-select option:hover {
+  background: rgba(37, 99, 235, 0.12);
+  color: #1f2937;
+}
+
+.light-theme .form-select option:checked {
+  background: #2563eb;
+  color: #fff;
+}
+
+.light-theme .btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+}
+
+.light-theme .btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
+}
+
+.light-theme .btn-outline-secondary:hover {
+  background: rgba(15, 23, 42, 0.06);
+  color: #1f2937;
+  border-color: rgba(15, 23, 42, 0.24);
+}
+
+.light-theme .post-content-box,
+.light-theme .comment-box,
+.light-theme .card,
+.light-theme .forum-item {
+  background: var(--bg-surface) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08) !important;
+}
+
+.light-theme .forum-item:hover {
+  background: var(--bg-surface);
+  border-color: rgba(15, 23, 42, 0.16);
+  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.08), 0 0 15px rgba(37, 99, 235, 0.08);
+}
+
+.light-theme .footer {
+  color: #475569;
+}
+
+.light-theme pre,
+.light-theme .hljs {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+.light-theme code {
+  background: rgba(15, 23, 42, 0.05);
+  color: #1f2937;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+.light-theme ::-webkit-scrollbar-track {
+  background: #e2e8f0;
+}
+
+.light-theme ::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+}
+
+.theme-toggle-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  min-width: 44px;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn i {
+  font-size: 1rem;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.05);
+}
+
+.light-theme .theme-toggle-btn {
+  color: #1f2937 !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Inputs & Forms */
+.form-control, .form-select {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  padding-right: 2.5rem;
+}
+
+.form-select option {
+  background: var(--bg-surface-solid);
+  color: #fff;
+  padding: 0.5rem 1rem;
+}
+
+.form-select option:hover {
+  background: var(--accent-color);
+  color: #fff;
+}
+
+.form-select option:checked {
+  background: linear-gradient(#3b82f6, #3b82f6);
+  background-color: #3b82f6;
+}
+
+.form-control:focus, .form-select:focus {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-label {
+  color: #d1d5db;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* Buttons */
+.btn {
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.6rem 1.5rem;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #e5e5e5, #ffffff);
+  color: #000;
+  border: none;
+  box-shadow: 0 4px 15px rgba(255,255,255,0.1);
+}
+
+.btn-primary:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255,255,255,0.2);
+}
+
+.btn-outline-secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid var(--border-subtle);
+}
+
+.btn-outline-secondary:hover {
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* Badges */
+.badge-category {
+  background: rgba(59, 130, 246, 0.1);
+  color: #93c5fd;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.forum-item {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.forum-item:nth-child(2) { animation-delay: 0.1s; }
+.forum-item:nth-child(3) { animation-delay: 0.2s; }
+.forum-item:nth-child(4) { animation-delay: 0.3s; }
+.forum-item:nth-child(5) { animation-delay: 0.4s; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.text-gradient {
+  background: linear-gradient(to right, #fff, #60a5fa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Code Syntax Highlighting */
+pre {
+  background: #0d1117 !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 8px;
+  padding: 1rem !important;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+pre code {
+  color: #e5e5e5;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+code {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  font-family: 'Courier New', Courier, monospace;
+  color: #93c5fd;
+  font-size: 0.9em;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* Highlight.js custom styling */
+.hljs {
+  background: #0d1117 !important;
+  color: #e5e5e5 !important;
+}
+
+.hljs-attr,
+.hljs-attribute {
+  color: #79c0ff;
+}
+
+.hljs-number,
+.hljs-literal {
+  color: #79c0ff;
+}
+
+.hljs-string {
+  color: #a5d6ff;
+}
+
+.hljs-title,
+.hljs-function .hljs-title,
+.hljs-class .hljs-title,
+.hljs-section {
+  color: #d2a8ff;
+  font-weight: 600;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal {
+  color: #ff7b72;
+}
+
+.hljs-variable {
+  color: #ffa657;
+}
+
+.hljs-comment {
+  color: #8b949e;
+  font-style: italic;
+}
+
+.hljs-meta {
+  color: #79c0ff;
+}
+
+/* Light theme overrides */
+html.light-theme,
+body.light-theme,
+html[data-theme="light"],
+body[data-theme="light"] {
+  background-color: #f8fafc !important;
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.12) 0%, transparent 50%) !important;
+  color: var(--text-main) !important;
+}
+
+html.light-theme a,
+body.light-theme a,
+html[data-theme="light"] a,
+body[data-theme="light"] a {
+  color: #1f2937 !important;
+}
+
+html.light-theme a:hover,
+body.light-theme a:hover,
+html[data-theme="light"] a:hover,
+body[data-theme="light"] a:hover {
+  color: #2563eb !important;
+}
+
+html.light-theme .text-light,
+body.light-theme .text-light,
+html[data-theme="light"] .text-light,
+body[data-theme="light"] .text-light {
+  color: #1f2937 !important;
+}
+
+html.light-theme .text-muted,
+body.light-theme .text-muted,
+html[data-theme="light"] .text-muted,
+body[data-theme="light"] .text-muted {
+  color: #6b7280 !important;
+}
+
+html.light-theme .custom-nav,
+body.light-theme .custom-nav,
+html[data-theme="light"] .custom-nav,
+body[data-theme="light"] .custom-nav {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+  box-shadow: 0 4px 30px rgba(15, 23, 42, 0.08) !important;
+}
+
+html.light-theme .custom-nav .nav-link,
+body.light-theme .custom-nav .nav-link,
+html[data-theme="light"] .custom-nav .nav-link,
+body[data-theme="light"] .custom-nav .nav-link,
+html.light-theme .custom-nav .navbar-brand,
+body.light-theme .custom-nav .navbar-brand,
+html[data-theme="light"] .custom-nav .navbar-brand,
+body[data-theme="light"] .custom-nav .navbar-brand,
+html.light-theme .custom-nav .btn,
+body.light-theme .custom-nav .btn,
+html[data-theme="light"] .custom-nav .btn,
+body[data-theme="light"] .custom-nav .btn {
+  color: #1f2937 !important;
+}
+
+html.light-theme .custom-nav .navbar-brand,
+body.light-theme .custom-nav .navbar-brand,
+html[data-theme="light"] .custom-nav .navbar-brand,
+body[data-theme="light"] .custom-nav .navbar-brand {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  color: #111827 !important;
+}
+
+html.light-theme .theme-toggle-btn,
+body.light-theme .theme-toggle-btn,
+html[data-theme="light"] .theme-toggle-btn,
+body[data-theme="light"] .theme-toggle-btn {
+  color: #1f2937 !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+html.light-theme .forum-title,
+body.light-theme .forum-title,
+html[data-theme="light"] .forum-title,
+body[data-theme="light"] .forum-title {
+  color: #111827 !important;
+}
+
+html.light-theme .forum-meta,
+body.light-theme .forum-meta,
+html[data-theme="light"] .forum-meta,
+body[data-theme="light"] .forum-meta {
+  color: #475569 !important;
+}
+
+html.light-theme .post-content-box,
+body.light-theme .post-content-box,
+html[data-theme="light"] .post-content-box,
+body[data-theme="light"] .post-content-box,
+html.light-theme .card,
+body.light-theme .card,
+html[data-theme="light"] .card,
+body[data-theme="light"] .card,
+html.light-theme .forum-item,
+body.light-theme .forum-item,
+html[data-theme="light"] .forum-item,
+body[data-theme="light"] .forum-item {
+  background: var(--bg-surface) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08) !important;
+}
+
+html.light-theme .forum-item:hover,
+body.light-theme .forum-item:hover,
+html[data-theme="light"] .forum-item:hover,
+body[data-theme="light"] .forum-item:hover {
+  background: var(--bg-surface) !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.08) !important;
+}
+
+html.light-theme .comment-box,
+body.light-theme .comment-box,
+html[data-theme="light"] .comment-box,
+body[data-theme="light"] .comment-box {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08) !important;
+}
+
+html.light-theme .reply-box,
+body.light-theme .reply-box,
+html[data-theme="light"] .reply-box,
+body[data-theme="light"] .reply-box {
+  background: rgba(255, 255, 255, 1) !important;
+  border-color: rgba(148, 163, 184, 0.25) !important;
+  box-shadow: 0 16px 40px rgba(148, 163, 184, 0.12) !important;
+}
+
+html:not(.light-theme) .comment-box,
+body:not(.light-theme) .comment-box,
+html:not([data-theme="light"]) .comment-box,
+body:not([data-theme="light"]) .comment-box {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+}
+
+html:not(.light-theme) .reply-box,
+body:not(.light-theme) .reply-box,
+html:not([data-theme="light"]) .reply-box,
+body:not([data-theme="light"]) .reply-box {
+  background: rgba(15, 23, 42, 0.90) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.20);
+}
+
+html:not(.light-theme) .comment-box .comment-meta,
+body:not(.light-theme) .comment-box .comment-meta,
+html:not(.light-theme) .reply-box .comment-meta,
+body:not(.light-theme) .reply-box .comment-meta,
+html:not([data-theme="light"]) .comment-box .comment-meta,
+body:not([data-theme="light"]) .comment-box .comment-meta,
+html:not([data-theme="light"]) .reply-box .comment-meta,
+body:not([data-theme="light"]) .reply-box .comment-meta {
+  color: #cbd5e1 !important;
+}
+
+html:not(.light-theme) .comment-box .comment-body,
+body:not(.light-theme) .comment-box .comment-body,
+html:not(.light-theme) .reply-box .comment-body,
+body:not(.light-theme) .reply-box .comment-body,
+html:not([data-theme="light"]) .comment-box .comment-body,
+body:not([data-theme="light"]) .comment-box .comment-body,
+html:not([data-theme="light"]) .reply-box .comment-body,
+body:not([data-theme="light"]) .reply-box .comment-body {
+  color: #f8fafc !important;
+}
+
+html:not(.light-theme) .comment-actions .btn-link,
+body:not(.light-theme) .comment-actions .btn-link,
+html:not([data-theme="light"]) .comment-actions .btn-link,
+body:not([data-theme="light"]) .comment-actions .btn-link {
+  color: #7dd3fc !important;
+}
+
+html:not(.light-theme) .comment-actions .btn-link:hover,
+body:not(.light-theme) .comment-actions .btn-link:hover,
+html:not([data-theme="light"]) .comment-actions .btn-link:hover,
+body:not([data-theme="light"]) .comment-actions .btn-link:hover {
+  color: #38bdf8 !important;
+}
+
+/* Strong dark theme styling for comment/reply sections */
+html:not(.light-theme) .comment-box,
+body:not(.light-theme) .comment-box,
+html:not([data-theme="light"]) .comment-box,
+body:not([data-theme="light"]) .comment-box,
+html:not(.light-theme) .reply-box,
+body:not(.light-theme) .reply-box,
+html:not([data-theme="light"]) .reply-box,
+body:not([data-theme="light"]) .reply-box {
+  background: rgba(15, 23, 42, 0.98) !important;
+  border-color: rgba(148, 163, 184, 0.28) !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28) !important;
+}
+
+html:not(.light-theme) .comment-box .comment-meta,
+body:not(.light-theme) .comment-box .comment-meta,
+html:not(.light-theme) .reply-box .comment-meta,
+body:not(.light-theme) .reply-box .comment-meta,
+html:not([data-theme="light"]) .comment-box .comment-meta,
+body:not([data-theme="light"]) .comment-box .comment-meta,
+html:not([data-theme="light"]) .reply-box .comment-meta,
+body:not([data-theme="light"]) .reply-box .comment-meta {
+  color: #cbd5e1 !important;
+}
+
+html:not(.light-theme) .nested-reply-area,
+body:not(.light-theme) .nested-reply-area,
+html:not([data-theme="light"]) .nested-reply-area,
+body:not([data-theme="light"]) .nested-reply-area {
+  background: rgba(15, 23, 42, 0.88) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16) !important;
+  padding: 1.25rem !important;
+  border-radius: 1rem !important;
+}
+
+html:not(.light-theme) .nested-reply-area .form-control,
+body:not(.light-theme) .nested-reply-area .form-control,
+html:not([data-theme="light"]) .nested-reply-area .form-control,
+body:not([data-theme="light"]) .nested-reply-area .form-control {
+  background: rgba(15, 23, 42, 0.92) !important;
+  border-color: rgba(148, 163, 184, 0.22) !important;
+  color: #f8fafc !important;
+}
+
+html:not(.light-theme) .nested-reply-area .form-control::placeholder,
+body:not(.light-theme) .nested-reply-area .form-control::placeholder,
+html:not([data-theme="light"]) .nested-reply-area .form-control::placeholder,
+body:not([data-theme="light"]) .nested-reply-area .form-control::placeholder {
+  color: rgba(226, 232, 240, 0.7) !important;
+}
+
+html.light-theme .form-control,
+body.light-theme .form-control,
+html[data-theme="light"] .form-control,
+body[data-theme="light"] .form-control,
+html.light-theme .form-select,
+body.light-theme .form-select,
+html[data-theme="light"] .form-select,
+body[data-theme="light"] .form-select {
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+html.light-theme .form-control:focus,
+body.light-theme .form-control:focus,
+html[data-theme="light"] .form-control:focus,
+body[data-theme="light"] .form-control:focus,
+html.light-theme .form-select:focus,
+body.light-theme .form-select:focus,
+html[data-theme="light"] .form-select:focus,
+body[data-theme="light"] .form-select:focus {
+  background: #fff !important;
+  color: #1f2937 !important;
+  border-color: rgba(37, 99, 235, 0.4) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+html.light-theme .form-select option,
+body.light-theme .form-select option,
+html[data-theme="light"] .form-select option,
+body[data-theme="light"] .form-select option {
+  background: #fff !important;
+  color: #1f2937 !important;
+}
+
+html.light-theme .form-select option:hover,
+body.light-theme .form-select option:hover,
+html[data-theme="light"] .form-select option:hover,
+body[data-theme="light"] .form-select option:hover {
+  background: rgba(37, 99, 235, 0.12) !important;
+  color: #1f2937 !important;
+}
+
+html.light-theme .btn-primary,
+body.light-theme .btn-primary,
+html[data-theme="light"] .btn-primary,
+body[data-theme="light"] .btn-primary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2) !important;
+}
+
+html.light-theme .btn-primary:hover,
+body.light-theme .btn-primary:hover,
+html[data-theme="light"] .btn-primary:hover,
+body[data-theme="light"] .btn-primary:hover {
+  background: #1d4ed8 !important;
+}
+
+html.light-theme .btn-outline-secondary,
+body.light-theme .btn-outline-secondary,
+html[data-theme="light"] .btn-outline-secondary,
+body[data-theme="light"] .btn-outline-secondary {
+  color: #1f2937 !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(15, 23, 42, 0.16) !important;
+}
+
+html.light-theme .btn-outline-secondary:hover,
+body.light-theme .btn-outline-secondary:hover,
+html[data-theme="light"] .btn-outline-secondary:hover,
+body[data-theme="light"] .btn-outline-secondary:hover {
+  background: rgba(15, 23, 42, 0.06) !important;
+  color: #1f2937 !important;
+}
+
+html.light-theme .text-secondary,
+body.light-theme .text-secondary,
+html[data-theme="light"] .text-secondary,
+body[data-theme="light"] .text-secondary {
+  color: #6b7280 !important;
+}
+
+html.light-theme .forum-item .bi,
+body.light-theme .forum-item .bi,
+html[data-theme="light"] .forum-item .bi,
+body[data-theme="light"] .forum-item .bi {
+  color: rgba(31, 41, 55, 0.7) !important;
+}
+
+.forum-avatar-icon {
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.75);
+  transition: color 0.2s ease;
+}
+
+html.light-theme .forum-avatar-icon,
+body.light-theme .forum-avatar-icon,
+html[data-theme="light"] .forum-avatar-icon,
+body[data-theme="light"] .forum-avatar-icon {
+  color: rgba(31, 41, 55, 0.75) !important;
+}
+
+.post-author-icon {
+  color: rgba(148, 163, 184, 0.9);
+}
+
+html.light-theme .post-author-icon,
+body.light-theme .post-author-icon,
+html[data-theme="light"] .post-author-icon,
+body[data-theme="light"] .post-author-icon {
+  color: rgba(75, 85, 99, 0.9) !important;
+}
+
+.post-content {
+  color: #e5e5e5;
+}
+
+html.light-theme .post-content,
+body.light-theme .post-content,
+html[data-theme="light"] .post-content,
+body[data-theme="light"] .post-content {
+  color: #1f2937 !important;
+}
+
+.post-header .bi-person-circle {
+  color: rgba(139, 146, 166, 0.9);
+}
+
+html.light-theme .post-header .bi-person-circle,
+body.light-theme .post-header .bi-person-circle,
+html[data-theme="light"] .post-header .bi-person-circle,
+body[data-theme="light"] .post-header .bi-person-circle {
+  color: rgba(107, 114, 128, 0.9) !important;
+}
+
+
+html.light-theme .badge-category,
+body.light-theme .badge-category,
+html[data-theme="light"] .badge-category,
+body[data-theme="light"] .badge-category {
+  background: rgba(37, 99, 235, 0.1) !important;
+  color: #2563eb !important;
+  border-color: rgba(37, 99, 235, 0.15) !important;
+}
+
+html.light-theme .footer,
+body.light-theme .footer,
+html[data-theme="light"] .footer,
+body[data-theme="light"] .footer {
+  color: #475569 !important;
+}
+
+html.light-theme pre,
+body.light-theme pre,
+html[data-theme="light"] pre,
+body[data-theme="light"] pre,
+html.light-theme .hljs,
+body.light-theme .hljs,
+html[data-theme="light"] .hljs,
+body[data-theme="light"] .hljs {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+html.light-theme code,
+body.light-theme code,
+html[data-theme="light"] code,
+body[data-theme="light"] code {
+  background: rgba(15, 23, 42, 0.05) !important;
+  color: #1f2937 !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+html.light-theme ::-webkit-scrollbar-track,
+body.light-theme ::-webkit-scrollbar-track,
+html[data-theme="light"] ::-webkit-scrollbar-track,
+body[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #e2e8f0 !important;
+}
+
+html.light-theme ::-webkit-scrollbar-thumb,
+body.light-theme ::-webkit-scrollbar-thumb,
+html[data-theme="light"] ::-webkit-scrollbar-thumb,
+body[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: #94a3b8 !important;
+}
+
