@@ -1,0 +1,38 @@
+@model Comment
+
+<div class="comment-item mb-3" data-comment-id="@Model.Id">
+    <div class="@(Model.ParentCommentId == null ? "comment-box" : "reply-box") p-3">
+        <div class="comment-meta text-muted border-bottom pb-2 mb-3" style="border-color: var(--border-subtle) !important;">
+            <span>
+                <strong style="color: var(--text-main);">@Model.Username</strong>
+                @if (Model.ParentComment != null) {
+                    <text>replied to </text><strong style="color: var(--text-main);">@Model.ParentComment.Username</strong>
+                } else {
+                    <text> replied</text>
+                }
+            </span>
+            <span>@Model.CommentDate.ToString("MMM dd, yyyy HH:mm")</span>
+        </div>
+        <div class="comment-body fs-6">@Html.Raw(Model.Content)</div>
+        <div class="comment-actions mt-3">
+            <button type="button" class="btn btn-link btn-sm reply-button" data-comment-id="@Model.Id" data-comment-user="@Model.Username"><i class="bi bi-reply-fill"></i> Reply</button>
+        </div>
+    </div>
+    <div class="nested-reply-area d-none mt-3">
+        <form class="nestedReplyForm" data-parent-id="@Model.Id">
+            <div class="mb-3">
+                <label class="form-label">Replying to @Model.Username</label>
+                <textarea class="form-control reply-content" rows="3" placeholder="Reply to @Model.Username..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Submit Reply</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm cancel-reply">Cancel</button>
+        </form>
+    </div>
+    @if (Model.Replies != null && Model.Replies.Any()) {
+        <div class="comment-replies mt-3">
+            @foreach (var reply in Model.Replies.OrderBy(r => r.CommentDate)) {
+                @await Html.PartialAsync("_CommentPartial", reply)
+            }
+        </div>
+    }
+</div>

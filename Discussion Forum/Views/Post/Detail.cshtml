@@ -8,7 +8,8 @@
     <div class="col-12 col-md-10 col-lg-8">
 
         <div class="mb-4 mt-4">
-            <a asp-action="Index" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Back to Discussions</a>
+            <a asp-action="Index" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Back to
+                Discussions</a>
         </div>
 
         <div class="post-header">
@@ -23,8 +24,10 @@
                     </div>
                 </div>
                 <div>
-                    <a asp-action="Edit" asp-controller="Post" asp-route-id="@Model.Id" class="btn btn-outline-secondary btn-sm me-2"><i class="bi bi-pencil-square"></i> Edit</a>
-                    <a asp-action="Delete" asp-controller="Post" asp-route-id="@Model.Id" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Delete</a>
+                    <a asp-action="Edit" asp-controller="Post" asp-route-id="@Model.Id"
+                        class="btn btn-outline-secondary btn-sm me-2"><i class="bi bi-pencil-square"></i> Edit</a>
+                    <a asp-action="Delete" asp-controller="Post" asp-route-id="@Model.Id"
+                        class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Delete</a>
                 </div>
             </div>
         </div>
@@ -32,11 +35,43 @@
         <div class="post-content-box mb-5 mt-4">
             @if (!string.IsNullOrEmpty(Model.FeatureImagePath))
             {
+
+                var extension = System.IO.Path.GetExtension(Model.FeatureImagePath).ToLower();
                 <div class="mb-4 text-center">
-                    <img src="@Model.FeatureImagePath" alt="Attachment" class="img-fluid rounded" style="max-height: 500px; border: 1px solid var(--border-subtle);" />
+                    @if (extension == ".pdf")
+                    {
+                        <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                            <i class="bi bi-file-earmark-pdf" style="font-size: 1.2rem; color: #dc3545;"></i>
+                            <a href="@Model.FeatureImagePath" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-box-arrow-up-right me-1"></i>Open PDF in New Tab
+                            </a>
+                            <a href="@Model.FeatureImagePath" download class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-download me-1"></i>Download
+                            </a>
+                        </div>
+                        <iframe src="@Model.FeatureImagePath"
+                            style="width: 100%; height: 600px; border: 1px solid var(--border-subtle); border-radius: 8px;"
+                            title="PDF Attachment"></iframe>
+                    }
+                    else if (extension == ".doc" || extension == ".docx")
+                    {
+                        <div class="p-4 rounded"
+                            style="border: 1px dashed var(--border-subtle); background: var(--bg-surface);">
+                            <i class="bi bi-file-earmark-word" style="font-size: 2rem; color: #2b579a;"></i>
+                            <p class="mt-2 mb-2 text-muted">Word Document Attached</p>
+                            <a href="@Model.FeatureImagePath" download class="btn btn-primary btn-sm">
+                                <i class="bi bi-download me-1"></i>Download Document
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <img src="@Model.FeatureImagePath" alt="Attachment" class="img-fluid rounded"
+                            style="width: 100%; max-height: 800px; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                    }
                 </div>
             }
-            
+
             <div class="fs-5 lh-lg post-content">
                 @Html.Raw(Model.Content)
             </div>
@@ -44,7 +79,7 @@
 
         <div id="commentSection" class="mt-5">
             <h3 class="mb-4">Comments (@Model.Comments.Count)</h3>
-            
+
             @if (!Model.Comments.Any())
             {
                 <div class="comment-box text-center p-4 text-muted mb-4" id="noRepliesDiv">
@@ -53,48 +88,11 @@
             }
             else
             {
-                @foreach (var comment in Model.Comments.Where(c => c.ParentCommentId == null).OrderBy(c => c.CommentDate))
+
+                foreach (var comment in Model.Comments.Where(c => c.ParentCommentId == null).OrderBy(c => c.CommentDate))
+
                 {
-                    <div class="comment-item mb-4" data-comment-id="@comment.Id">
-                        <div class="comment-box p-3"> <div class="comment-meta text-muted border-bottom pb-2 mb-3" style="border-color: var(--border-subtle) !important;">
-                                <span><strong style="color: var(--text-main);">@comment.Username</strong> replied</span>
-                                <span>@comment.CommentDate.ToString("MMM dd, yyyy HH:mm")</span>
-                            </div>
-                            
-                            <div class="comment-body fs-6">@Html.Raw(comment.Content)</div>
-                            
-                            <div class="comment-actions mt-3">
-                                <button type="button" class="btn btn-link btn-sm reply-button" data-comment-id="@comment.Id" data-comment-user="@comment.Username"><i class="bi bi-reply-fill"></i> Reply</button>
-                            </div>
-                        </div>
-
-                        @if (comment.Replies.Any())
-                        {
-                            <div class="comment-replies mt-4">
-                                @foreach (var reply in comment.Replies.OrderBy(r => r.CommentDate))
-                                {
-                                    <div class="reply-box p-3"> <div class="comment-meta text-muted border-bottom pb-2 mb-3" style="border-color: var(--border-subtle) !important;">
-                                            <span><strong style="color: var(--text-main);">@reply.Username</strong> replied to @comment.Username</span>
-                                            <span>@reply.CommentDate.ToString("MMM dd, yyyy HH:mm")</span>
-                                        </div>
-
-                                        <div class="comment-body fs-6">@Html.Raw(reply.Content)</div>
-                                    </div>
-                                }
-                            </div>
-                        }
-
-                        <div class="nested-reply-area d-none mt-3">
-                            <form class="nestedReplyForm" data-parent-id="@comment.Id">
-                                <div class="mb-3">
-                                    <label class="form-label">Replying to @comment.Username</label>
-                                    <textarea class="form-control reply-content" rows="3" placeholder="Reply to @comment.Username..."></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-sm">Submit Reply</button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm cancel-reply">Cancel</button>
-                            </form>
-                        </div>
-                    </div>
+                    @await Html.PartialAsync("_CommentPartial", comment)
                 }
             }
         </div>
@@ -105,19 +103,27 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="Username" class="form-label">Display Name</label>
-                        <input type="text" id="Username" name="Username" class="form-control" autocomplete="off" value="@(User.Identity.IsAuthenticated ? User.Identity.Name : "")" @(User.Identity.IsAuthenticated ? "readonly" : "")>
+                        <input type="text" id="Username" name="Username" class="form-control" autocomplete="off"
+                            value="@(User.Identity.IsAuthenticated ? User.Identity.Name : "")"
+                        @(User.Identity.IsAuthenticated ? "readonly" : "")>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label for="Content" class="form-label">Message</label>
-                    <small class="text-muted d-block mb-2"><i class="bi bi-info-circle"></i> Tip: Add code with syntax highlighting using &lt;code class="language-csharp"&gt;your code&lt;/code&gt; (supports: csharp, javascript, python, html, sql, etc.)</small>
-                    <textarea name="Content" id="Content" rows="4" required class="form-control" placeholder="Write your reply..."></textarea>
+                    <small class="text-muted d-block mb-2"><i class="bi bi-info-circle"></i> Tip: Add code with syntax
+                        highlighting using &lt;code class="language-csharp"&gt;your code&lt;/code&gt; (supports: csharp,
+                        javascript, python, html, sql, etc.)</small>
+                    <textarea name="Content" id="Content" rows="4" required class="form-control"
+                        placeholder="Write your reply..."></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit Reply</button>
             </form>
         </div>
 
-    </div> </div> @section Scripts{
+    </div>
+</div>
+
+@section Scripts{
     <script>
         $(document).ready(function () {
             function submitComment(parentCommentId, content, callback) {
@@ -143,22 +149,15 @@
                 });
             }
 
-            $("#commentForm").on('submit', function (event) {
-                event.preventDefault();
-                var content = $("#Content").val();
-                if (!content) return;
-
-                submitComment(null, content, function(response) {
-                    $('#commentForm')[0].reset();
-                    @if(User.Identity.IsAuthenticated)
-                    {
-                        @: $("#Username").val('@User.Identity.Name');
-                    }
-                    var newCommentHTML = `
-                    <div class="comment-item mb-4" data-comment-id="${response.commentId}">
+            function buildCommentHtml(response, parentUsername) {
+                var replyingTo = parentUsername
+                    ? `replied to <strong style="color: var(--text-main);">${parentUsername}</strong>`
+                    : 'replied';
+                return `
+                    <div class="comment-item mb-3" data-comment-id="${response.commentId}">
                         <div class="comment-box p-3">
                             <div class="comment-meta text-muted border-bottom pb-2 mb-3" style="border-color: var(--border-subtle) !important;">
-                                <span><strong style="color: var(--text-main);">${response.username}</strong> replied Just Now</span>
+                                <span><strong style="color: var(--text-main);">${response.username}</strong> ${replyingTo}</span>
                                 <span>${response.commentDate}</span>
                             </div>
                             <div class="comment-body fs-6">${response.comment}</div>
@@ -176,47 +175,57 @@
                                 <button type="button" class="btn btn-outline-secondary btn-sm cancel-reply">Cancel</button>
                             </form>
                         </div>
-                    </div>
-                    `;
-                    $('#commentSection').append(newCommentHTML);
+                    </div>`;
+            }
+
+            // Top-level comment submission
+            $("#commentForm").on('submit', function (event) {
+                event.preventDefault();
+                var content = $("#Content").val();
+                if (!content) return;
+
+                submitComment(null, content, function (response) {
+                    $('#commentForm')[0].reset();
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @:$("#Username").val('@User.Identity.Name');
+                    }
+                    var html = buildCommentHtml(response, null);
+                    $('#commentSection').append(html);
                 });
             });
 
+            // Show reply form (only the immediate one, not children)
             $(document).on('click', '.reply-button', function () {
                 $('.nested-reply-area').addClass('d-none');
                 var commentItem = $(this).closest('.comment-item');
-                commentItem.find('.nested-reply-area').removeClass('d-none');
-                commentItem.find('.reply-content').focus();
+                commentItem.children('.nested-reply-area').removeClass('d-none');
+                commentItem.children('.nested-reply-area').find('.reply-content').focus();
             });
 
             $(document).on('click', '.cancel-reply', function () {
                 $(this).closest('.nested-reply-area').addClass('d-none');
             });
 
+            // Nested reply submission — creates a new nested comment under the parent
             $(document).on('submit', '.nestedReplyForm', function (event) {
                 event.preventDefault();
                 var form = $(this);
                 var parentCommentId = form.data('parent-id');
+                var parentUser = form.closest('.comment-item').find('.reply-button').first().data('comment-user');
                 var content = form.find('.reply-content').val();
                 if (!content) return;
 
-                submitComment(parentCommentId, content, function(response) {
-                    var replyHtml = `
-                    <div class="reply-box p-3">
-                        <div class="comment-meta text-muted border-bottom pb-2 mb-3" style="border-color: var(--border-subtle) !important;">
-                            <span><strong style="color: var(--text-main);">${response.username}</strong> replied</span>
-                            <span>${response.commentDate}</span>
-                        </div>
-                        <div class="comment-body fs-6">${response.comment}</div>
-                    </div>
-                    `;
-                    var replyArea = form.closest('.comment-item').find('.comment-replies');
-                    if (!replyArea.length) {
-                        replyArea = $('<div class="comment-replies mt-4"></div>');
-                        form.before(replyArea);
+                submitComment(parentCommentId, content, function (response) {
+                    var html = buildCommentHtml(response, parentUser);
+                    var commentItem = form.closest('.comment-item');
+                    var repliesArea = commentItem.children('.comment-replies');
+                    if (!repliesArea.length) {
+                        repliesArea = $('<div class="comment-replies mt-3"></div>');
+                        commentItem.append(repliesArea);
                     }
-                    replyArea.append(replyHtml);
-                    form.addClass('d-none');
+                    repliesArea.append(html);
+                    form.closest('.nested-reply-area').addClass('d-none');
                     form.find('.reply-content').val('');
                 });
             });

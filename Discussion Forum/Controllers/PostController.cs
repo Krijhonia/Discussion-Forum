@@ -13,7 +13,7 @@ namespace DiscussionForum.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly string[] _allowedExtension = { ".jpg", ".jpeg", ".png", ".gif" }; // Allowed image extensions
+        private readonly string[] _allowedExtension = { ".jpg", ".jpeg", ".png", ".pdf" ,".docx","doc"}; // Allowed Extensions
         public PostController(AppDbContext context,IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
@@ -65,7 +65,6 @@ namespace DiscussionForum.Controllers
             var post = _context.Posts
                 .Include(p => p.Category)
                 .Include(p => p.Comments)
-                    .ThenInclude(c => c.Replies)
                 .FirstOrDefault(p => p.Id == id);
             if(post == null)
             {

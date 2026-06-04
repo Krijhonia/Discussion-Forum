@@ -1,10 +1,263 @@
+@model DiscussionForum.Models.ViewModels.HomeViewModel
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "PSTCL Discussion Forum";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- ═══════════════════ HERO SECTION ═══════════════════ -->
+<section class="hero-section">
+    <div class="hero-content text-center">
+        <h1 class="hero-title">
+            PSTCL Discussion Forum
+        </h1>
+        <p class="hero-subtitle">
+            Internal knowledge-sharing platform for Punjab State Transmission Corporation Limited employees.
+            Discuss technical issues, share circulars, and collaborate across departments.
+        </p>
+        <div class="hero-actions">
+            <a asp-controller="Post" asp-action="Index" class="btn btn-primary btn-lg hero-btn">
+                <i class="bi bi-chat-left-dots me-2"></i>Browse Discussions
+            </a>
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Account" asp-action="Register" class="btn btn-outline-secondary btn-lg hero-btn">
+                    <i class="bi bi-person-plus me-2"></i>Join the Forum
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Post" asp-action="Create" class="btn btn-outline-secondary btn-lg hero-btn">
+                    <i class="bi bi-plus-circle me-2"></i>Start a Topic
+                </a>
+            }
+        </div>
+    </div>
+    <div class="hero-stats">
+        <div class="hero-stat">
+            <span class="hero-stat-value">@Model.TotalPosts</span>
+            <span class="hero-stat-label">Discussions</span>
+        </div>
+        <div class="hero-stat-sep"></div>
+        <div class="hero-stat">
+            <span class="hero-stat-value">@Model.TotalComments</span>
+            <span class="hero-stat-label">Replies</span>
+        </div>
+        <div class="hero-stat-sep"></div>
+        <div class="hero-stat">
+            <span class="hero-stat-value">@Model.TotalMembers</span>
+            <span class="hero-stat-label">Members</span>
+        </div>
+        <div class="hero-stat-sep"></div>
+        <div class="hero-stat">
+            <span class="hero-stat-value">@Model.CategoryStats.Count</span>
+            <span class="hero-stat-label">Categories</span>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════ QUICK ACCESS ═══════════════════ -->
+<section class="home-section">
+    <div class="section-header">
+        <h2>Quick Access</h2>
+        <a href="https://www.pstcl.org/" target="_blank" class="section-link">
+            pstcl.org <i class="bi bi-box-arrow-up-right"></i>
+        </a>
+    </div>
+    <div class="quick-pills">
+        <a href="https://www.pstcl.org/oo.aspx" target="_blank" class="quick-pill">
+            <i class="bi bi-file-earmark-ruled"></i> Office Orders
+        </a>
+        <a href="https://www.pstcl.org/seniority.aspx" target="_blank" class="quick-pill">
+            <i class="bi bi-list-ol"></i> Seniority List
+        </a>
+        <a href="https://www.pstcl.org/nitindex.aspx" target="_blank" class="quick-pill">
+            <i class="bi bi-megaphone"></i> NITs / Tenders
+        </a>
+        <a href="https://www.pstcl.org/trainingindex.aspx" target="_blank" class="quick-pill">
+            <i class="bi bi-mortarboard"></i> Training
+        </a>
+        <a href="https://www.pstcl.org/download.aspx" target="_blank" class="quick-pill">
+            <i class="bi bi-download"></i> Downloads
+        </a>
+        <a href="https://www.pstcl.org/Directory.aspx" target="_blank" class="quick-pill">
+            <i class="bi bi-telephone"></i> Directory
+        </a>
+    </div>
+</section>
+
+<!-- ═══════════════════ CATEGORIES SECTION ═══════════════════ -->
+<section class="home-section">
+    <div class="section-header">
+        <h2>Categories</h2>
+        <a asp-controller="Post" asp-action="Index" class="section-link">
+            View All <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+    <div class="categories-grid">
+        @{
+            var categoryIcons = new Dictionary<string, string> { { "Technology", "bi-cpu" }, { "Health", "bi-heart-pulse"
+        }, { "LifeStyle", "bi-stars" } };
+
+            var categoryColors = new Dictionary<string, string> { { "Technology", "#3b82f6" }, { "Health", "#10b981" }, {
+        "LifeStyle", "#f59e0b" } };
+        }
+        @foreach (var cat in Model.CategoryStats)
+        {
+
+            var icon = categoryIcons.ContainsKey(cat.Name) ? categoryIcons[cat.Name] : "bi-folder";
+
+            var color = categoryColors.ContainsKey(cat.Name) ? categoryColors[cat.Name] : "#8b5cf6";
+            <a asp-controller="Post" asp-action="Index" asp-route-categoryId="@cat.Id" class="category-card"
+                style="--card-accent: @color;">
+                <div class="category-card-icon" style="background: @(color)14;">
+                    <i class="bi @icon" style="color: @color; font-size: 1.5rem;"></i>
+                </div>
+                <div class="category-card-body">
+                    <h4 class="category-card-title">@cat.Name</h4>
+                    <div class="category-card-stats">
+                        <span><strong>@cat.PostCount</strong> posts</span>
+                        <span><strong>@cat.CommentCount</strong> replies</span>
+                    </div>
+                    @if (cat.LatestPost != null)
+                    {
+                        <div class="category-card-latest">
+                            <small class="text-muted">Latest:</small>
+                            <small class="category-latest-title">@cat.LatestPost.Title</small>
+                        </div>
+                    }
+                </div>
+                <div class="category-card-arrow">
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            </a>
+        }
+    </div>
+</section>
+
+<!-- ═══════════════════ CONTENT GRID: Recent + Trending ═══════════════════ -->
+<div class="home-content-grid">
+    <!-- Recent Discussions -->
+    <section class="home-section">
+        <div class="section-header">
+            <h2>Recent Discussions</h2>
+            <a asp-controller="Post" asp-action="Index" class="section-link">
+                See All <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+        @if (Model.RecentPosts.Any())
+        {
+            <div class="home-post-list">
+                @foreach (var post in Model.RecentPosts)
+                {
+                    <a asp-controller="Post" asp-action="Detail" asp-route-id="@post.Id" class="home-post-item">
+                        <div class="home-post-info">
+                            <h5 class="home-post-title">@post.Title</h5>
+                            <div class="home-post-meta">
+                                <span class="badge-category-sm">@(post.Category?.Name ?? "General")</span>
+                                <span>@post.Author</span>
+                                <span class="meta-dot">·</span>
+                                <span>@post.PublishedDate.ToString("MMM dd")</span>
+                            </div>
+                        </div>
+                        <div class="home-post-reply-count">
+                            <i class="bi bi-chat-dots"></i>
+                            <span>@(post.Comments?.Count ?? 0)</span>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="home-empty-state">
+                <i class="bi bi-chat-square-text"></i>
+                <p>No discussions yet. Be the first to start one!</p>
+                <a asp-controller="Post" asp-action="Create" class="btn btn-primary btn-sm">Create a Topic</a>
+            </div>
+        }
+    </section>
+
+    <!-- Trending Discussions -->
+    <section class="home-section">
+        <div class="section-header">
+            <h2>Most Active</h2>
+        </div>
+        @if (Model.TrendingPosts.Any())
+        {
+            <div class="home-post-list">
+                @{
+                    int rank = 1;
+                }
+                @foreach (var post in Model.TrendingPosts)
+                {
+                    <a asp-controller="Post" asp-action="Detail" asp-route-id="@post.Id" class="home-post-item trending-item">
+                        <div class="trending-rank">@(rank++)</div>
+                        <div class="home-post-info">
+                            <h5 class="home-post-title">@post.Title</h5>
+                            <div class="home-post-meta">
+                                <span class="badge-category-sm">@(post.Category?.Name ?? "General")</span>
+                                <span>@(post.Comments?.Count ?? 0) replies</span>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="home-empty-state">
+                <i class="bi bi-bar-chart-line"></i>
+                <p>No trending discussions yet.</p>
+            </div>
+        }
+    </section>
 </div>
 
+<!-- ═══════════════════ ABOUT PSTCL BAR ═══════════════════ -->
+<section class="pstcl-about-section">
+    <div class="pstcl-about-grid">
+        <div class="pstcl-about-info">
+            <h3>About PSTCL</h3>
+            <p>Punjab State Transmission Corporation Limited (PSTCL) is responsible for the transmission of electricity
+                across the state of Punjab, India. PSTCL operates and maintains the high voltage transmission network
+                including 400kV, 220kV, and 132kV substations and transmission lines.</p>
+            <div class="pstcl-about-links">
+                <a href="https://www.pstcl.org/aboutus.aspx" target="_blank" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-info-circle me-1"></i>Organization Profile
+                </a>
+                <a href="https://www.pstcl.org/vision.aspx" target="_blank" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-bullseye me-1"></i>Vision & Mission
+                </a>
+                <a href="https://www.pstcl.org/Directory.aspx" target="_blank" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-telephone me-1"></i>Contact Us
+                </a>
+            </div>
+        </div>
+        <div class="pstcl-about-address">
+            <h5><i class="bi bi-geo-alt me-2"></i>Registered Office</h5>
+            <p class="text-muted mb-1">Punjab State Transmission Corp. Ltd.</p>
+            <p class="text-muted mb-1">PSEB Head Office, The Mall, Patiala</p>
+            <p class="text-muted mb-1">Pin: 147001</p>
+            <p class="text-muted mb-0" style="font-size: 0.8rem;">CIN: U40109PB2010SGC033814</p>
+        </div>
+    </div>
+</section>
 
+<!-- ═══════════════════ CTA SECTION ═══════════════════ -->
+@if (!User.Identity.IsAuthenticated)
+{
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Join the PSTCL Discussion Forum</h2>
+            <p class="text-muted">Register to participate in discussions, share technical knowledge, and stay updated with
+                your colleagues.</p>
+            <div class="cta-actions">
+                <a asp-controller="Account" asp-action="Register" class="btn btn-primary">
+                    <i class="bi bi-person-plus me-2"></i>Register Now
+                </a>
+                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-secondary">
+                    Sign In
+                </a>
+            </div>
+        </div>
+    </section>
+}

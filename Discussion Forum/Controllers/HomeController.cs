@@ -1,6 +1,9 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using DiscussionForum.Models;
+using DiscussionForum.Models.ViewModels;
+using DiscussionForum.Data;
 
 namespace DiscussionForum.Controllers;
 
@@ -8,12 +11,57 @@ namespace DiscussionForum.Controllers;
 // Jab koi user sirf base URL (jaise www.mysite.com) par aata hai, toh yeh controller chalta hai.
 public class HomeController : Controller
 {
+    private readonly AppDbContext _context;
+
+    public HomeController(AppDbContext context)
+    {
+        _context = context;
+    }
+
     // Index Action: Yeh website ka "Home Page" hai.
     // Jab user "/" ya "/Home/Index" URL par jayega, toh yeh method execute hoga.
     public IActionResult Index()
     {
-        // View() ka matlab hai ki yeh "Views/Home/Index.cshtml" file ko dhoondhega aur browser mein render karega.
-        return View();
+        var recentPosts = _context.Posts
+            .Include(p => p.Category)
+            .Include(p => p.Comments)
+            .OrderByDescending(p => p.PublishedDate)
+            .Take(5)
+            .ToList();
+
+        var trendingPosts = _context.Posts
+            .Include(p => p.Category)
+            .Include(p => p.Comments)
+            .OrderByDescending(p => p.Comments.Count)
+            .ThenByDescending(p => p.PublishedDate)
+            .Take(5)
+            .ToList();
+
+        var categoryStats = _context.Categories
+            .Include(c => c.Posts)
+                .ThenInclude(p => p.Comments)
+            .Select(c => new CategoryStat
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Description = c.Description,
+                PostCount = c.Posts.Count,
+                CommentCount = c.Posts.SelectMany(p => p.Comments).Count(),
+                LatestPost = c.Posts.OrderByDescending(p => p.PublishedDate).FirstOrDefault()
+            })
+            .ToList();
+
+        var viewModel = new HomeViewModel
+        {
+            RecentPosts = recentPosts,
+            TrendingPosts = trendingPosts,
+            CategoryStats = categoryStats,
+            TotalPosts = _context.Posts.Count(),
+            TotalComments = _context.Comments.Count(),
+            TotalMembers = _context.Users.Count()
+        };
+
+        return View(viewModel);
     }
 
     // Privacy Action: Yeh Privacy Policy page ke liye hai.

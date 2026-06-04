@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/DevForum/BlogPost.csproj",
+                "${workspaceFolder}/Discussion Forum/Discussion Forum.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/DevForum/BlogPost.csproj",
+                "${workspaceFolder}/Discussion Forum/Discussion Forum.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/DevForum/BlogPost.csproj"
+                "${workspaceFolder}/Discussion Forum/Discussion Forum.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
