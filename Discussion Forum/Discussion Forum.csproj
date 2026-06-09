@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>DiscussionForum</AssemblyName>
     <RootNamespace>DiscussionForum</RootNamespace>
+    <UserSecretsId>c1010446-42d0-4214-b2ca-c847e752b61d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

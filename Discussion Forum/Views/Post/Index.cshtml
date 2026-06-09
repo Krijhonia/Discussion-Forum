@@ -2,7 +2,7 @@
 @model IEnumerable<Post>
 
 @{
- ViewData["Title"] = "Tech Discussions";
+    ViewData["Title"] = "Tech Discussions";
 }
 
 <div class="row align-items-center mb-4">
@@ -16,12 +16,12 @@
     <div class="col-md-5 d-flex flex-wrap gap-2 justify-content-md-end">
         <span class="text-muted d-flex align-items-center me-1"><small>Filter:</small></span>
         <a asp-controller="Post" asp-action="Index" class="btn btn-outline-secondary btn-sm" style="border-radius: 15px;">All</a>
-        @if(ViewBag.Categories != null)
+        @if (ViewBag.Categories != null)
         {
-           @foreach(var category in ViewBag.Categories)
-           {
-               <a asp-controller="Post" asp-action="Index" asp-route-categoryId="@category.Id" class="btn btn-outline-secondary btn-sm" style="border-radius: 15px;">@category.Name</a>
-           }
+            @foreach (var category in ViewBag.Categories)
+            {
+                       <a asp-controller="Post" asp-action="Index" asp-route-categoryId="@category.Id" class="btn btn-outline-secondary btn-sm" style="border-radius: 15px;">@category.Name</a>
+            }
         }
     </div>
 </div>
@@ -38,26 +38,26 @@
 <div class="forum-list shadow-sm">
     @if (!Model.Any())
     {
-        <div class="p-4 text-center text-muted">No discussions found. Start one!</div>
+            <div class="p-4 text-center text-muted">No discussions found. Start one!</div>
     }
-    @foreach(var post in Model.OrderByDescending(p => p.PublishedDate))
+    @foreach (var post in Model.OrderByDescending(p => p.PublishedDate))
     {
-        <div class="forum-item align-items-center">
-            <div class="me-3 text-center d-none d-sm-block" style="width: 50px;">
-                <i class="bi bi-person-circle forum-avatar-icon"></i>
-            </div>
-            <div class="flex-grow-1">
-                <a asp-action="Detail" asp-controller="Post" asp-route-id="@post.Id" class="forum-title d-block mb-1">@post.Title</a>
-                <div class="forum-meta">
-                    <span class="badge-category me-2">@(post.Category?.Name ?? "Tech")</span>
-                    <span>Started by <strong>@post.Author</strong> on @post.PublishedDate.ToString("MMM dd, yyyy")</span>
+            <div class="forum-item align-items-center">
+                <div class="me-3 text-center d-none d-sm-block" style="width: 50px;">
+                    <i class="bi bi-person-circle forum-avatar-icon"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <a asp-action="Detail" asp-controller="Post" asp-route-id="@post.Id" class="forum-title d-block mb-1">@post.Title</a>
+                    <div class="forum-meta">
+                        <span class="badge-category me-2">@(post.Category?.Name ?? "Tech")</span>
+                        <span>Started by <strong>@post.Author</strong> on @post.PublishedDate.ToString("MMM dd, yyyy")</span>
+                    </div>
+                </div>
+                <div class="ms-3 text-end d-none d-md-block text-muted">
+                    <div class="fs-6"><i class="bi bi-reply-fill ms-3"></i> @(post.Comments?.Count ?? 0)</div>
+                    <small>replies</small>
                 </div>
             </div>
-            <div class="ms-3 text-end d-none d-md-block text-muted">
-                <div class="fs-6"><i class="bi bi-reply-fill ms-3"></i> @(post.Comments?.Count ?? 0)</div>
-                <small>replies</small>
-            </div>
-        </div>
     }
 </div>
 
@@ -68,28 +68,28 @@
     var prevPage = ViewBag.CurrentPage - 1;
     var nextPage = ViewBag.CurrentPage + 1;
 
-    <nav aria-label="Page navigation" class="mt-4">
-        <ul class="pagination justify-content-center">
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
             @if (ViewBag.CurrentPage > 1)
             {
-                <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@prevPage" asp-route-categoryId="@currentCategory" asp-route-searchString="@currentSearch" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-main);">Previous</a>
-                </li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@prevPage" asp-route-categoryId="@currentCategory" asp-route-searchString="@currentSearch" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-main);">Previous</a>
+                        </li>
             }
 
             @for (int i = 1; i <= ViewBag.TotalPages; i++)
             {
-                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                    <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-categoryId="@currentCategory" asp-route-searchString="@currentSearch" style="@(i == ViewBag.CurrentPage ? "background-color: var(--accent-color); border-color: var(--accent-color);" : "background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-main);")">@i</a>
-                </li>
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-categoryId="@currentCategory" asp-route-searchString="@currentSearch" style="@(i == ViewBag.CurrentPage ? "background-color: var(--accent-color); border-color: var(--accent-color);" : "background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-main);")">@i</a>
+                        </li>
             }
 
             @if (ViewBag.CurrentPage < ViewBag.TotalPages)
             {
-                <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@nextPage" asp-route-categoryId="@currentCategory" asp-route-searchString="@currentSearch" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-main);">Next</a>
-                </li>
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@nextPage" asp-route-categoryId="@currentCategory" asp-route-searchString="@currentSearch" style="background: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-main);">Next</a>
+                        </li>
             }
-        </ul>
-    </nav>
+            </ul>
+        </nav>
 }

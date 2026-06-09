@@ -37,39 +37,84 @@
             {
 
                 var extension = System.IO.Path.GetExtension(Model.FeatureImagePath).ToLower();
-                <div class="mb-4 text-center">
+                    <div class="mb-4 text-center">
                     @if (extension == ".pdf")
+
                     {
-                        <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
-                            <i class="bi bi-file-earmark-pdf" style="font-size: 1.2rem; color: #dc3545;"></i>
-                            <a href="@Model.FeatureImagePath" target="_blank" class="btn btn-outline-primary btn-sm">
-                                <i class="bi bi-box-arrow-up-right me-1"></i>Open PDF in New Tab
-                            </a>
-                            <a href="@Model.FeatureImagePath" download class="btn btn-outline-secondary btn-sm">
-                                <i class="bi bi-download me-1"></i>Download
-                            </a>
-                        </div>
-                        <iframe src="@Model.FeatureImagePath"
-                            style="width: 100%; height: 600px; border: 1px solid var(--border-subtle); border-radius: 8px;"
-                            title="PDF Attachment"></iframe>
+                                <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                                    <i class="bi bi-file-earmark-pdf" style="font-size: 1.2rem; color: #dc3545;"></i>
+                                    <a href="@Model.FeatureImagePath" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-box-arrow-up-right me-1"></i>Open PDF in New Tab
+                                    </a>
+                                    <a href="@Model.FeatureImagePath" download class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-download me-1"></i>Download
+                                    </a>
+                                </div>
+                                <iframe src="@Model.FeatureImagePath"
+                                    style="width: 100%; height: 600px; border: 1px solid var(--border-subtle); border-radius: 8px;"
+                                    title="PDF Attachment"></iframe>
                     }
+
                     else if (extension == ".doc" || extension == ".docx")
+
                     {
-                        <div class="p-4 rounded"
-                            style="border: 1px dashed var(--border-subtle); background: var(--bg-surface);">
-                            <i class="bi bi-file-earmark-word" style="font-size: 2rem; color: #2b579a;"></i>
-                            <p class="mt-2 mb-2 text-muted">Word Document Attached</p>
-                            <a href="@Model.FeatureImagePath" download class="btn btn-primary btn-sm">
-                                <i class="bi bi-download me-1"></i>Download Document
-                            </a>
-                        </div>
+                                <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                                    <i class="bi bi-file-earmark-word" style="font-size: 1.2rem; color: #2b579a;"></i>
+                                    <span class="text-muted">Word Document</span>
+                                    <a href="@Model.FeatureImagePath" download class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-download me-1"></i>Download
+                                    </a>
+                                </div>
+                                <div id="docx-preview-container"
+                                    data-file-url="@Model.FeatureImagePath"
+                                    style="width: 100%; min-height: 500px; border: 1px solid var(--border-subtle); border-radius: 8px; background: #fff; overflow: auto; text-align: left;">
+                                    <div class="text-center p-4 text-muted">
+                                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                        Loading document preview...
+                                    </div>
+                                </div>
                     }
+
+                    else if (extension == ".pptx")
+
+                    {
+                                <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                                    <i class="bi bi-file-earmark-ppt" style="font-size: 1.2rem; color: #d24726;"></i>
+                                    <span class="text-muted">PowerPoint Presentation</span>
+                                    <a href="@Model.FeatureImagePath" download class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-download me-1"></i>Download
+                                    </a>
+                                </div>
+                                <div id="pptx-preview-container"
+                                    data-file-url="@Model.FeatureImagePath"
+                                    style="width: 100%; min-height: 500px; border: 1px solid var(--border-subtle); border-radius: 8px; background: #fff; overflow: auto;">
+                                    <div class="text-center p-4 text-muted">
+                                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                        Loading presentation preview...
+                                    </div>
+                                </div>
+                    }
+
+                    else if (extension == ".ppt")
+
+                    {
+                                <div class="p-4 rounded"
+                                    style="border: 1px dashed var(--border-subtle); background: var(--bg-surface);">
+                                    <i class="bi bi-file-earmark-ppt" style="font-size: 2rem; color: #d24726;"></i>
+                                    <p class="mt-2 mb-2 text-muted">PowerPoint Presentation (.ppt) — Preview not available for legacy format</p>
+                                    <a href="@Model.FeatureImagePath" download class="btn btn-primary btn-sm">
+                                        <i class="bi bi-download me-1"></i>Download Presentation
+                                    </a>
+                                </div>
+                    }
+
                     else
+
                     {
-                        <img src="@Model.FeatureImagePath" alt="Attachment" class="img-fluid rounded"
-                            style="width: 100%; max-height: 800px; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                                <img src="@Model.FeatureImagePath" alt="Attachment" class="img-fluid rounded"
+                                    style="width: 100%; max-height: 800px; object-fit: contain; border: 1px solid var(--border-subtle);" />
                     }
-                </div>
+                    </div>
             }
 
             <div class="fs-5 lh-lg post-content">
@@ -82,9 +127,9 @@
 
             @if (!Model.Comments.Any())
             {
-                <div class="comment-box text-center p-4 text-muted mb-4" id="noRepliesDiv">
-                    No replies yet. Be the first to share your thoughts!
-                </div>
+                    <div class="comment-box text-center p-4 text-muted mb-4" id="noRepliesDiv">
+                        No replies yet. Be the first to share your thoughts!
+                    </div>
             }
             else
             {
@@ -110,9 +155,6 @@
                 </div>
                 <div class="mb-3">
                     <label for="Content" class="form-label">Message</label>
-                    <small class="text-muted d-block mb-2"><i class="bi bi-info-circle"></i> Tip: Add code with syntax
-                        highlighting using &lt;code class="language-csharp"&gt;your code&lt;/code&gt; (supports: csharp,
-                        javascript, python, html, sql, etc.)</small>
                     <textarea name="Content" id="Content" rows="4" required class="form-control"
                         placeholder="Write your reply..."></textarea>
                 </div>
@@ -124,111 +166,179 @@
 </div>
 
 @section Scripts{
-    <script>
-        $(document).ready(function () {
-            function submitComment(parentCommentId, content, callback) {
-                var userName = $("#Username").val();
-                if (!userName || !content) return;
+        <script>
+            $(document).ready(function () {
+                function submitComment(parentCommentId, content, callback) {
+                    var userName = $("#Username").val();
+                    if (!userName || !content) return;
 
-                var postId = @Model.Id;
-                $.ajax({
-                    url: '@Url.Action("AddComment","Post")',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        Username: userName,
-                        Content: content,
-                        PostId: postId,
-                        ParentCommentId: parentCommentId
-                    }),
-                    success: function (response) {
-                        if (callback) callback(response);
-                        $('#noRepliesDiv').remove();
-                        hljs.highlightAll();
-                    }
-                });
-            }
+                    var postId = @Model.Id;
+                    $.ajax({
+                        url: '@Url.Action("AddComment","Post")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            Username: userName,
+                            Content: content,
+                            PostId: postId,
+                            ParentCommentId: parentCommentId
+                        }),
+                        success: function (response) {
+                            if (callback) callback(response);
+                            $('#noRepliesDiv').remove();
+                            hljs.highlightAll();
+                        }
+                    });
+                }
 
-            function buildCommentHtml(response, parentUsername) {
-                var replyingTo = parentUsername
-                    ? `replied to <strong style="color: var(--text-main);">${parentUsername}</strong>`
-                    : 'replied';
-                return `
-                    <div class="comment-item mb-3" data-comment-id="${response.commentId}">
-                        <div class="comment-box p-3">
-                            <div class="comment-meta text-muted border-bottom pb-2 mb-3" style="border-color: var(--border-subtle) !important;">
-                                <span><strong style="color: var(--text-main);">${response.username}</strong> ${replyingTo}</span>
-                                <span>${response.commentDate}</span>
-                            </div>
-                            <div class="comment-body fs-6">${response.comment}</div>
-                            <div class="comment-actions mt-3">
-                                <button type="button" class="btn btn-link btn-sm reply-button" data-comment-id="${response.commentId}" data-comment-user="${response.username}"><i class="bi bi-reply-fill"></i> Reply</button>
-                            </div>
-                        </div>
-                        <div class="nested-reply-area d-none mt-3">
-                            <form class="nestedReplyForm" data-parent-id="${response.commentId}">
-                                <div class="mb-3">
-                                    <label class="form-label">Replying to ${response.username}</label>
-                                    <textarea class="form-control reply-content" rows="3" placeholder="Reply to ${response.username}..."></textarea>
+                function buildCommentHtml(response, parentUsername) {
+                    var replyingTo = parentUsername
+                        ? `replied to <strong style="color: var(--text-main);">${parentUsername}</strong>`
+                        : 'replied';
+                    return `
+                        <div class="comment-item mb-3" data-comment-id="${response.commentId}">
+                            <div class="comment-box p-3">
+                                <div class="comment-meta text-muted border-bottom pb-2 mb-3" style="border-color: var(--border-subtle) !important;">
+                                    <span><strong style="color: var(--text-main);">${response.username}</strong> ${replyingTo}</span>
+                                    <span>${response.commentDate}</span>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">Submit Reply</button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm cancel-reply">Cancel</button>
-                            </form>
-                        </div>
-                    </div>`;
-            }
+                                <div class="comment-body fs-6">${response.comment}</div>
+                                <div class="comment-actions mt-3">
+                                    <button type="button" class="btn btn-link btn-sm reply-button" data-comment-id="${response.commentId}" data-comment-user="${response.username}"><i class="bi bi-reply-fill"></i> Reply</button>
+                                </div>
+                            </div>
+                            <div class="nested-reply-area d-none mt-3">
+                                <form class="nestedReplyForm" data-parent-id="${response.commentId}">
+                                    <div class="mb-3">
+                                        <label class="form-label">Replying to ${response.username}</label>
+                                        <textarea class="form-control reply-content" rows="3" placeholder="Reply to ${response.username}..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm">Submit Reply</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm cancel-reply">Cancel</button>
+                                </form>
+                            </div>
+                        </div>`;
+                }
 
-            // Top-level comment submission
-            $("#commentForm").on('submit', function (event) {
-                event.preventDefault();
-                var content = $("#Content").val();
-                if (!content) return;
+                // Top-level comment submission
+                $("#commentForm").on('submit', function (event) {
+                    event.preventDefault();
+                    var content = $("#Content").val();
+                    if (!content) return;
 
-                submitComment(null, content, function (response) {
-                    $('#commentForm')[0].reset();
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        @:$("#Username").val('@User.Identity.Name');
-                    }
-                    var html = buildCommentHtml(response, null);
-                    $('#commentSection').append(html);
+                    submitComment(null, content, function (response) {
+                        $('#commentForm')[0].reset();
+        @if (User.Identity.IsAuthenticated)
+
+        {
+            @:$("#Username").val('@User.Identity.Name');
+        }
+                        var html = buildCommentHtml(response, null);
+                        $('#commentSection').append(html);
+                    });
+                });
+
+                // Show reply form (only the immediate one, not children)
+                $(document).on('click', '.reply-button', function () {
+                    $('.nested-reply-area').addClass('d-none');
+                    var commentItem = $(this).closest('.comment-item');
+                    commentItem.children('.nested-reply-area').removeClass('d-none');
+                    commentItem.children('.nested-reply-area').find('.reply-content').focus();
+                });
+
+                $(document).on('click', '.cancel-reply', function () {
+                    $(this).closest('.nested-reply-area').addClass('d-none');
+                });
+
+                // Nested reply submission — creates a new nested comment under the parent
+                $(document).on('submit', '.nestedReplyForm', function (event) {
+                    event.preventDefault();
+                    var form = $(this);
+                    var parentCommentId = form.data('parent-id');
+                    var parentUser = form.closest('.comment-item').find('.reply-button').first().data('comment-user');
+                    var content = form.find('.reply-content').val();
+                    if (!content) return;
+
+                    submitComment(parentCommentId, content, function (response) {
+                        var html = buildCommentHtml(response, parentUser);
+                        var commentItem = form.closest('.comment-item');
+                        var repliesArea = commentItem.children('.comment-replies');
+                        if (!repliesArea.length) {
+                            repliesArea = $('<div class="comment-replies mt-3"></div>');
+                            commentItem.append(repliesArea);
+                        }
+                        repliesArea.append(html);
+                        form.closest('.nested-reply-area').addClass('d-none');
+                        form.find('.reply-content').val('');
+                    });
                 });
             });
+        </script>
 
-            // Show reply form (only the immediate one, not children)
-            $(document).on('click', '.reply-button', function () {
-                $('.nested-reply-area').addClass('d-none');
-                var commentItem = $(this).closest('.comment-item');
-                commentItem.children('.nested-reply-area').removeClass('d-none');
-                commentItem.children('.nested-reply-area').find('.reply-content').focus();
+        @* Word Document Preview using mammoth.js (supports .doc and .docx) + docx-preview *@
+        <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/docx-preview@0.3.3/dist/docx-preview.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var docxContainer = document.getElementById('docx-preview-container');
+                if (docxContainer) {
+                    var fileUrl = docxContainer.getAttribute('data-file-url');
+
+                    fetch(fileUrl)
+                        .then(function (response) {
+                            if (!response.ok) throw new Error('Failed to load document');
+                            return response.arrayBuffer();
+                        })
+                        .then(function (arrayBuffer) {
+                            var blob = new Blob([arrayBuffer]);
+
+                            if (typeof docx !== 'undefined' && docx.renderAsync) {
+                                docx.renderAsync(blob, docxContainer, null, {
+                                    className: 'docx-preview-content',
+                                    inWrapper: true,
+                                    ignoreWidth: false,
+                                    ignoreHeight: false,
+                                    ignoreFonts: false,
+                                    breakPages: true,
+                                    ignoreLastRenderedPageBreak: true
+                                }).catch(function () {
+                                    renderWithMammoth(arrayBuffer, docxContainer);
+                                });
+                            } else {
+                                renderWithMammoth(arrayBuffer, docxContainer);
+                            }
+                        })
+                        .catch(function (err) {
+                            docxContainer.innerHTML = '<div class="p-4 text-center text-muted">' +
+                                '<i class="bi bi-exclamation-triangle" style="font-size: 2rem; color: #fbbf24;"></i>' +
+                                '<p class="mt-2">Could not load document. Please download instead.</p></div>';
+                        });
+                }
+
+                function renderWithMammoth(arrayBuffer, container) {
+                    mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+                        .then(function (result) {
+                            container.innerHTML =
+                                '<div style="padding: 2rem; font-family: Inter, sans-serif; line-height: 1.8; color: #1f2937;">' +
+                                result.value +
+                                '</div>';
+                        })
+                        .catch(function (err) {
+                            container.innerHTML = '<div class="p-4 text-center text-muted">' +
+                                '<i class="bi bi-exclamation-triangle" style="font-size: 2rem; color: #fbbf24;"></i>' +
+                                '<p class="mt-2">Could not render document preview. Please download instead.</p></div>';
+                        });
+                }
+
+                var pptxContainer = document.getElementById('pptx-preview-container');
+                if (pptxContainer) {
+                    pptxContainer.innerHTML =
+                        '<div class="p-4 text-center">' +
+                            '<i class="bi bi-file-earmark-ppt" style="font-size: 3rem; color: #d24726;"></i>' +
+                            '<p class="mt-3 mb-2 text-muted">PowerPoint preview is available when deployed to a public server.</p>' +
+                            '<p class="text-muted small">For now, please download the file to view it.</p>' +
+                        '</div>';
+                }
             });
-
-            $(document).on('click', '.cancel-reply', function () {
-                $(this).closest('.nested-reply-area').addClass('d-none');
-            });
-
-            // Nested reply submission — creates a new nested comment under the parent
-            $(document).on('submit', '.nestedReplyForm', function (event) {
-                event.preventDefault();
-                var form = $(this);
-                var parentCommentId = form.data('parent-id');
-                var parentUser = form.closest('.comment-item').find('.reply-button').first().data('comment-user');
-                var content = form.find('.reply-content').val();
-                if (!content) return;
-
-                submitComment(parentCommentId, content, function (response) {
-                    var html = buildCommentHtml(response, parentUser);
-                    var commentItem = form.closest('.comment-item');
-                    var repliesArea = commentItem.children('.comment-replies');
-                    if (!repliesArea.length) {
-                        repliesArea = $('<div class="comment-replies mt-3"></div>');
-                        commentItem.append(repliesArea);
-                    }
-                    repliesArea.append(html);
-                    form.closest('.nested-reply-area').addClass('d-none');
-                    form.find('.reply-content').val('');
-                });
-            });
-        });
-    </script>
+        </script>
 }

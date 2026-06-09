@@ -13,7 +13,7 @@ namespace DiscussionForum.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly string[] _allowedExtension = { ".jpg", ".jpeg", ".png", ".pdf" ,".docx","doc"}; // Allowed Extensions
+        private readonly string[] _allowedExtension = { ".jpg", ".jpeg", ".png", ".gif", ".pdf", ".doc", ".docx", ".ppt", ".pptx" }; // Allowed Extensions
         public PostController(AppDbContext context,IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
@@ -103,7 +103,7 @@ namespace DiscussionForum.Controllers
                     bool isAllowed = _allowedExtension.Contains(inputFileExtension);
                     if (!isAllowed)
                     {
-                        ModelState.AddModelError("","Invalid Image Format. Allowed formats are: .jpg, .jpeg, .png, .gif");
+                        ModelState.AddModelError("","Invalid file format. Allowed formats: .jpg, .jpeg, .png, .gif, .pdf, .doc, .docx, .ppt, .pptx");
                         postViewModel.Categories = _context.Categories.Select(c => 
                         new SelectListItem
                         {
@@ -278,7 +278,10 @@ namespace DiscussionForum.Controllers
             var inputFileExtension = Path.GetExtension(file.FileName);
             var fileName = Guid.NewGuid().ToString() + inputFileExtension; // Unique file name generate karne ke liye
             var wwwRootPath = _webHostEnvironment.WebRootPath;
-            var imagesFolderPath = Path.Combine(wwwRootPath, "images");
+            var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            var isImage = imageExtensions.Contains(inputFileExtension.ToLower());
+            var folderName = isImage ? "images" : "uploads";
+            var imagesFolderPath = Path.Combine(wwwRootPath, folderName);
 
             if (!Directory.Exists(imagesFolderPath))
             {
@@ -296,7 +299,7 @@ namespace DiscussionForum.Controllers
             {
                 return $"Error uploading file: {ex.Message}";
             }
-            return "/images/" + fileName; // Return the relative path to the uploaded image
+            return "/" + folderName + "/" + fileName; // Return the relative path to the uploaded file
         }   
 }
 }
